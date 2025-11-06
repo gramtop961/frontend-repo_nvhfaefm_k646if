@@ -1,52 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import Spline from '@splinetool/react-spline';
 import { Rocket, Play, MessageSquare } from 'lucide-react';
-
-// Safe Spline loader to prevent white-screen if the scene fails to load
-function SafeSpline({ scene }) {
-  const [SplineComp, setSplineComp] = useState(null);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    let mounted = true;
-    import('@splinetool/react-spline')
-      .then((mod) => {
-        if (mounted) setSplineComp(() => mod.default);
-      })
-      .catch((e) => {
-        console.error('Spline failed to load:', e);
-        if (mounted) setError(e);
-      });
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  if (error) {
-    return (
-      <div className="flex h-full w-full items-center justify-center bg-black/40">
-        <div className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs text-white/70 backdrop-blur">
-          3D preview unavailable on this device/network.
-        </div>
-      </div>
-    );
-  }
-
-  if (!SplineComp) {
-    return (
-      <div className="flex h-full w-full items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-2 border-white/30 border-t-emerald-300" />
-      </div>
-    );
-  }
-
-  return <SplineComp scene={scene} style={{ width: '100%', height: '100%' }} />;
-}
 
 export default function Hero3D() {
   return (
     <section className="relative min-h-[80vh] w-full overflow-hidden rounded-3xl border border-white/10 bg-black/60 shadow-2xl">
       <div className="absolute inset-0">
-        <SafeSpline scene="https://prod.spline.design/4nF0yqVka2Z4lK3d/scene.splinecode" />
+        <Spline scene="https://prod.spline.design/4nF0yqVka2Z4lK3d/scene.splinecode" style={{ width: '100%', height: '100%' }} />
       </div>
 
       {/* Soft gradient glass overlays - keep them non-blocking for interactions */}
